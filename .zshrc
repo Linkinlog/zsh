@@ -143,6 +143,7 @@ docker() {
 
 # Other Aliases
 alias nv="nvim"
+alias nim="nvim"
 alias config="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias dash-dev="cd /home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
 alias dev-dash="/home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
