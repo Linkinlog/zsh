@@ -153,7 +153,7 @@ config() {
     if [[ $@ == "nvim" ]] || [[ $@ == "tmux" ]] || [[ $@ == "zsh" ]]; then
         command nvim ~/.config/"$@"
     else
-        command configCmd "$@"
+        command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME "$@"
     fi
 }
 
