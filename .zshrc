@@ -121,18 +121,22 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Show hidden files for completion
+setopt globdots
+
 # Overwrite the default agnoster with our theme
 ln -sf $HOME/.config/zsh/agnoster.zsh-theme $ZSH/themes/agnoster.zsh-theme
 
 # Set up config alias and git config for bare git repo
-alias config="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
-config config --local status.showUntrackedFiles no
+alias configCmd="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+configCmd config --local status.showUntrackedFiles no
 
 # Samcart configs
-alias appexec="docker compose exec app"
-alias mgmtexec="docker compose exec mgmt"
-alias nf="cd ~/workspaces/foundation; nvim -c 'source ~/workspaces/foundation-session'"
-export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
+if [[ $HOST == "samcart-dseyler" ]]; then
+    alias appexec="docker compose exec app"
+    alias mgmtexec="docker compose exec mgmt"
+    alias tf="tmux new-session -s foundation -c ~/workspaces/foundation/"
+fi
 
 # Docker rebuild function
 docker() {
@@ -144,12 +148,21 @@ docker() {
     fi
 }
 
+# Config Editing
+config() {
+    if [[ $@ == "nvim" ]] || [[ $@ == "tmux" ]] || [[ $@ == "zsh" ]]; then
+        command nvim ~/.config/"$@"
+    else
+        command configCmd "$@"
+    fi
+}
 
 # Other Aliases
 alias nv="nvim"
 alias nim="nvim"
 alias dash-dev="cd /home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
 alias dev-dash="/home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
+alias ts="tmux new-session -s"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
