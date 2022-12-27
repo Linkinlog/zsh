@@ -153,6 +153,8 @@ config() {
     if [[ $@ == "nvim" ]] || [[ $@ == "tmux" ]] || [[ $@ == "zsh" ]]; then
         cd $HOME/.config/"$@"
         command nvim 
+    elif [[ $@ == "update" ]]; then
+        command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME submodule update --recursive --remote
     else
         command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME "$@"
     fi
