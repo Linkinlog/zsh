@@ -151,7 +151,8 @@ docker() {
 # Config Editing
 config() {
     if [[ $@ == "nvim" ]] || [[ $@ == "tmux" ]] || [[ $@ == "zsh" ]]; then
-        command nvim ~/.config/"$@"
+        cd $HOME/.config/"$@"
+        command nvim 
     else
         command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME "$@"
     fi
