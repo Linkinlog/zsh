@@ -165,6 +165,7 @@ alias dash-dev="cd /home/owner/vvv-local/www/dashbored/public_html/wp-content/pl
 alias dev-dash="/home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
 alias ts="tmux new-session -s"
 
+# NVM stuff
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
