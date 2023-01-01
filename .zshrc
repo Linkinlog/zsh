@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/:$PATH
+export PATH=$HOME/go/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -123,6 +123,9 @@ fi
 
 # Show hidden files for completion
 setopt globdots
+
+# Set keyboard repeat higher
+xset r rate 190 60
 
 # Overwrite the default agnoster with our theme
 ln -sf $HOME/.config/zsh/agnoster.zsh-theme $ZSH/themes/agnoster.zsh-theme
