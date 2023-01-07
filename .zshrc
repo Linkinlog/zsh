@@ -125,7 +125,7 @@ fi
 setopt globdots
 
 # Set keyboard repeat higher
-xset r rate 190 60
+xset r rate 190 60 2>/dev/null
 
 # Overwrite the default agnoster with our theme
 ln -sf $HOME/.config/zsh/agnoster.zsh-theme $ZSH/themes/agnoster.zsh-theme
@@ -151,11 +151,17 @@ docker() {
     fi
 }
 
+# Change directory and list
+cdl() {
+    cd $@ && l
+}
+
 # Config Editing
 config() {
     if [[ $@ == "nvim" ]] || [[ $@ == "tmux" ]] || [[ $@ == "zsh" ]]; then
         cd $HOME/.config/"$@"
         command nvim 
+        cd - 1>/dev/null
     elif [[ $@ == "update" ]]; then
         command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME submodule update --recursive --remote
     else
@@ -165,7 +171,7 @@ config() {
 
 # Other Aliases
 alias nv="nvim"
-alias nim="nvim"
+alias nim="nvim" # Laptop's 'v' key is broke
 alias dash-dev="cd /home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
 alias dev-dash="/home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
 alias ts="tmux new-session -s"
