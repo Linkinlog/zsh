@@ -163,7 +163,7 @@ config() {
         command nvim 
         cd - 1>/dev/null
     elif [[ $@ == "update" ]]; then
-        command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME submodule update --recursive --remote
+        command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME submodule update --init --recursive --remote
     else
         command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME "$@"
     fi
