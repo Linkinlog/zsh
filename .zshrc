@@ -151,6 +151,10 @@ docker() {
     fi
 }
 
+# Nix stuff
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+alias nixxy="nix-env --file $HOME/.config/nix/default.nix"
+
 # Change directory and list
 cdl() {
     cd $@ && l
