@@ -175,6 +175,7 @@ alias nim="nvim" # Laptop's 'v' key is broke
 alias dash-dev="cd /home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
 alias dev-dash="/home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
 alias ts="tmux new-session -s"
+alias nixxy="nix-env --file $HOME/.config/nix/default.nix"
 
 # NVM stuff
 export NVM_DIR="$HOME/.nvm"
