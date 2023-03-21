@@ -154,6 +154,9 @@ docker() {
 # Nix stuff
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 alias nixxy="nix-env --file $HOME/.config/nix/default.nix"
+alias nixxyc="nix-collect-garbage && nixxy -i"
+export LD_LIBRARY_PATH="$HOME/.nix-profile/lib:$HOME/.nix-profile/lib64"
+
 
 # Change directory and list
 cdl() {
