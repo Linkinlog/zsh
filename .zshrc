@@ -152,11 +152,16 @@ docker() {
 }
 
 # Nix stuff
-if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-alias nixxy="nix-env --file $HOME/.config/nix/default.nix"
-alias nixxyc="nix-collect-garbage && nixxy -i"
-export LD_LIBRARY_PATH="$HOME/.nix-profile/lib:$HOME/.nix-profile/lib64"
-
+if command -v check_nix > /dev/null; then
+    # Sets aliases, env vars, and installs if needed
+    alias nixxy="nix-env --file $HOME/.config/nix/default.nix"
+    alias nixxyi="nixxy -i"
+    alias nixxyu="nixxy -u"
+    alias nixxyc="nix-collect-garbage && nixxyi"
+    #Set up env vars
+    export LD_LIBRARY_PATH="$HOME/.nix-profile/lib:$HOME/.nix-profile/lib64"
+    check_nix
+fi
 
 # Change directory and list
 cdl() {
@@ -178,11 +183,7 @@ config() {
 
 # Other Aliases
 alias nv="nvim"
-alias nim="nvim" # Laptop's 'v' key is broke
-alias dash-dev="cd /home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
-alias dev-dash="/home/owner/vvv-local/www/dashbored/public_html/wp-content/plugins/dashboard"
 alias ts="tmux new-session -s"
-alias nixxy="nix-env --file $HOME/.config/nix/default.nix"
 
 # NVM stuff
 export NVM_DIR="$HOME/.nvm"
