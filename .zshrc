@@ -144,8 +144,9 @@ fi
 # Docker rebuild function
 docker() {
     if [[ $@ == "--rebuild" ]]; then
-        command docker compose down &&
-		command docker compose up --build
+        command docker compose down ;
+        command docker compose build &&
+		command docker compose up -d
     else
         command docker "$@"
     fi
