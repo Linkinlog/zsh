@@ -152,16 +152,8 @@ docker() {
 }
 
 # Nix stuff
-if command -v check_nix > /dev/null; then
-    # Sets aliases, env vars, and installs if needed
-    alias nixxy="nix-env --file $HOME/.config/nix/default.nix"
-    alias nixxyi="nixxy -i"
-    alias nixxyu="nixxy -u"
-    alias nixxyc="nix-collect-garbage && nixxyi"
-    #Set up env vars
-    export LD_LIBRARY_PATH="$HOME/.nix-profile/lib:$HOME/.nix-profile/lib64"
-    check_nix
-fi
+# Sets aliases, env vars
+source $HOME/.local/bin/check_nix
 
 # Change directory and list
 cdl() {
