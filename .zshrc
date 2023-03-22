@@ -173,6 +173,7 @@ config() {
         command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME "$@"
     fi
 }
+alias lazyconf="lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
 # Other Aliases
 alias nv="nvim"
