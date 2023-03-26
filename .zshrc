@@ -93,10 +93,6 @@ docker() {
     fi
 }
 
-# Nix stuff
-# Sets aliases, env vars
-source $HOME/.local/bin/check_nix
-
 # Change directory and list
 cdl() {
     cd $@ && l
