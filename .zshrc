@@ -69,7 +69,7 @@ setopt globdots
 xset r rate 190 60 2>/dev/null
 
 # Overwrite the default agnoster with our theme
-ln -sf $HOME/.config/zsh/agnoster.zsh-theme $ZSH/themes/agnoster.zsh-theme
+ln -sf $HOME/.config/zsh/agnoster.zsh-theme $ZSH_CUSTOM/themes/agnoster.zsh-theme
 
 # Samcart configs
 if [[ $HOST == "samcart-dseyler" ]]; then
