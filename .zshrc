@@ -71,10 +71,6 @@ xset r rate 190 60 2>/dev/null
 # Overwrite the default agnoster with our theme
 ln -sf $HOME/.config/zsh/agnoster.zsh-theme $ZSH/themes/agnoster.zsh-theme
 
-# Set up config alias and git config for bare git repo
-alias configCmd="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
-configCmd config --local status.showUntrackedFiles no
-
 # Samcart configs
 if [[ $HOST == "samcart-dseyler" ]]; then
     alias appexec="docker compose exec app"
@@ -99,18 +95,24 @@ cdl() {
 }
 
 # Config Editing
+local git_args="--git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME"
 config() {
-    if [[ $@ == "nvim" ]] || [[ $@ == "tmux" ]] || [[ $@ == "zsh" ]]; then
-        cd $HOME/.config/"$@"
-        command nvim 
-        cd - 1>/dev/null
-    elif [[ $@ == "update" ]]; then
-        command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME submodule update --init --recursive --remote
+    if [[ $1 == "nvim" ]] || [[ $1 == "tmux" ]] || [[ $1 == "zsh" ]]; then
+        local config_dir="$HOME/.config/$1"
+        if [[ -d $config_dir ]]; then
+            cd "$config_dir"
+            command nvim
+            cd - >/dev/null 2>&1
+        else
+            echo "Error: Configuration directory $config_dir not found."
+        fi
+    elif [[ $1 == "update" ]]; then
+        command /usr/bin/git $git_args submodule update --init --recursive --remote
     else
-        command /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME "$@"
+        command /usr/bin/git $git_args "$@"
     fi
 }
-alias lazyconf="lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+alias lazyconf="lazygit --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME"
 
 # Other Aliases
 alias nv="nvim"
