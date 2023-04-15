@@ -95,7 +95,7 @@ cdl() {
 }
 
 # Config Editing
-local git_args="--git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME"
+local git_args=( "--git-dir=$HOME/.dotfiles.git/" "--work-tree=$HOME" )
 config() {
     if [[ $1 == "nvim" ]] || [[ $1 == "tmux" ]] || [[ $1 == "zsh" ]]; then
         local config_dir="$HOME/.config/$1"
@@ -107,9 +107,9 @@ config() {
             echo "Error: Configuration directory $config_dir not found."
         fi
     elif [[ $1 == "update" ]]; then
-        command /usr/bin/git $git_args submodule update --init --recursive --remote
+        command /usr/bin/git "${git_args[@]}" submodule update --init --recursive --remote
     else
-        command /usr/bin/git $git_args "$@"
+        command /usr/bin/git "${git_args[@]}" "$@"
     fi
 }
 alias lazyconf="lazygit --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME"
