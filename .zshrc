@@ -37,6 +37,7 @@ plugins=(
 
 
 source $ZSH/oh-my-zsh.sh
+source $HOME/.config/zsh/check_for_updates.sh
 
 # User configuration
 
@@ -93,26 +94,6 @@ docker() {
 cdl() {
     cd $@ && l
 }
-
-# Config Editing
-local git_args=( "--git-dir=$HOME/.dotfiles.git/" "--work-tree=$HOME" )
-config() {
-    if [[ $1 == "nvim" ]] || [[ $1 == "tmux" ]] || [[ $1 == "zsh" ]]; then
-        local config_dir="$HOME/.config/$1"
-        if [[ -d $config_dir ]]; then
-            cd "$config_dir"
-            command nvim
-            cd - >/dev/null 2>&1
-        else
-            echo "Error: Configuration directory $config_dir not found."
-        fi
-    elif [[ $1 == "update" ]]; then
-        command /usr/bin/git "${git_args[@]}" submodule update --init --recursive --remote
-    else
-        command /usr/bin/git "${git_args[@]}" "$@"
-    fi
-}
-alias lazyconf="lazygit --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME"
 
 # Other Aliases
 alias nv="nvim"
