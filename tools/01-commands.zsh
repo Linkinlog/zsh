@@ -62,6 +62,7 @@ repo_update_check() {
         printf "\n"
         if [[ "$answer" == "y" ]]; then
             config pull --quiet --rebase origin "$current_branch"
+            config update
         fi
     fi
 }
