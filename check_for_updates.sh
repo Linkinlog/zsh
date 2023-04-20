@@ -17,9 +17,9 @@ config() {
     if [[ $1 == "nvim" ]] || [[ $1 == "tmux" ]] || [[ $1 == "zsh" ]]; then
         local config_dir="$HOME/.config/$1"
         if [[ -d $config_dir ]]; then
-            cd "$config_dir"
+            cd "$config_dir" || exit
             command nvim
-            cd - >/dev/null 2>&1
+            cd - >/dev/null 2>&1 || exit
         else
             echo "Error: Configuration directory $config_dir not found."
         fi
@@ -43,6 +43,6 @@ if [[ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ]]; then
     echo -n "Do you want to update now? (y/n): "
     read -r answer
     if [[ "$answer" == "y" ]]; then
-        config pull --rebase
+        config pull --quiet --rebase origin "$CURRENT_BRANCH"
     fi
 fi
