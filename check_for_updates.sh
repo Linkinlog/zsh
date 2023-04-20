@@ -21,7 +21,7 @@ config() {
             command nvim
             cd - >/dev/null 2>&1 || exit
         else
-            echo "Error: Configuration directory $config_dir not found."
+            printf "Error: Configuration directory %s not found.\n" "$config_dir"
         fi
     elif [[ $1 == "update" ]]; then
         command /usr/bin/git "${git_args[@]}" submodule update --init --recursive --remote
@@ -32,16 +32,17 @@ config() {
 
 # Use lazygit with our bare repo
 lazyconf() {
-   command lazygit "${git_args[@]}" "$@"
+    command lazygit "${git_args[@]}" "$@"
 }
 
 # If the most recent remote commit isnt the commit we are on, assume we update
 if [[ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ]]; then
-    echo "There is an update available for the repository:"
-    echo "Local commit: $LOCAL_COMMIT"
-    echo "Remote commit: $REMOTE_COMMIT"
-    echo -n "Do you want to update now? (y/n): "
+    printf "There is an update available for the repository:\n"
+    printf "Local commit: %s\n" "$LOCAL_COMMIT"
+    printf "Remote commit: %s\n" "$REMOTE_COMMIT"
+    printf "Do you want to update now? (y/n): "
     read -r answer
+    printf "\n"
     if [[ "$answer" == "y" ]]; then
         config pull --quiet --rebase origin "$CURRENT_BRANCH"
     fi
