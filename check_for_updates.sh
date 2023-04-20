@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Config Editing
+# Check for updates to our Github repo
 
 # Args to specify bare repo
 local git_args=( "--git-dir=$HOME/.dotfiles.git/" "--work-tree=$HOME" )
@@ -38,7 +38,7 @@ config fetch >/dev/null 2>&1
 LOCAL_COMMIT=$(config rev-parse HEAD)
 REMOTE_COMMIT=$(config ls-remote origin -h refs/heads/$CURRENT_BRANCH | cut -f1)
 
-# Check if there's an update available
+# If the most recent remote commit isnt the commit we are on, assume we update
 if [[ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ]]; then
     echo "There is an update available for the repository:"
     echo "Local commit: $LOCAL_COMMIT"
@@ -46,7 +46,6 @@ if [[ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ]]; then
     echo -n "Do you want to update now? (y/n): "
     read -r answer
     if [[ "$answer" == "y" ]]; then
-        # Update your local repository
         config pull --rebase
     fi
 fi
