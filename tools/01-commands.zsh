@@ -3,22 +3,43 @@
 # Args to specify bare repo
 config_git_args=("--git-dir=$HOME/.dotfiles.git/" "--work-tree=$HOME")
 
-# General git usage for config
-config() {
-    if [[ $1 == "nvim" ]] || [[ $1 == "tmux" ]] || [[ $1 == "zsh" ]]; then
-        local config_dir="$HOME/.config/$1"
-        if [[ -d $config_dir ]]; then
-            cd "$config_dir" || exit
-            command nvim
-            cd - >/dev/null 2>&1 || exit
-        else
-            printf "Error: Configuration directory %s not found.\n" "$config_dir"
-        fi
-    elif [[ $1 == "update" ]]; then
-        command /usr/bin/git "${config_git_args[@]}" submodule update --init --recursive --remote
-    else
-        command /usr/bin/git "${config_git_args[@]}" "$@"
+# To run git commands using the dotfiles repo
+dotdo() {
+    command /usr/bin/git "${config_git_args[@]}" "$@"
+}
+
+# To update the submodules properly
+dotup() {
+    dotdo submodule update --init --recursive --remote
+}
+
+# To easily run the main command for syncing
+dotsync() {
+    sudo -v
+    command "$HOME/.local/bin/main.sh"
+}
+
+# To edit our config files
+dotedit() {
+    local cmd="$1"
+    declare -A config_dirs=(
+        ["nvim"]="$HOME/.config/nvim/init.vim"
+        ["tmux"]="$HOME/.config/tmux/tmux.conf"
+        ["zsh"]="$HOME/.config/zsh/.zshrc"
+        ["main"]="$HOME/.local/bin/main.sh"
+    )
+
+    if [[ -z "${config_dirs[$cmd]}" ]]; then
+        printf "Error: Command not recognized: %s\n" "$cmd"
+        return 1
     fi
+
+    if [[ ! -f "${config_dirs[$cmd]}" ]]; then
+        printf "Error: Configuration file %s not found.\n" "${config_dirs[$cmd]}"
+        return 1
+    fi
+
+    nvim "${config_dirs[$cmd]}"
 }
 
 # Use lazygit with our bare repo
@@ -39,17 +60,18 @@ docker() {
 
 # Change directory and list
 cdl() {
-    cd $@ && l
+    command cd $@ &&
+    command l
 }
 
 # Check for updates to the repo and pull if needed
 repo_update_check() {
     local current_branch local_commit remote_commit repo
     # Allows us to be on any branch
-    current_branch=$(config rev-parse --abbrev-ref HEAD)
+    current_branch=$(dotdo rev-parse --abbrev-ref HEAD)
     # Local/remote commit shows what point we are at in the git history for each
-    repo="Linkinlog/.dotfiles" # TODO make this not hardcoded
-    local_commit=$(config rev-parse HEAD)
+    repo="${DOTREPO:-Linkinlog/.dotfiles}"
+    local_commit=$(dotdo rev-parse HEAD)
     remote_commit=$(curl --connect-timeout 2 -fsSL -H 'Accept: application/vnd.github.v3.sha' "https://api.github.com/repos/$repo/commits/$current_branch")
 
     # If the most recent remote commit isnt the commit we are on, assume we update
@@ -61,8 +83,8 @@ repo_update_check() {
         read -r answer
         printf "\n"
         if [[ "$answer" == "y" ]]; then
-            config pull --quiet --rebase origin "$current_branch"
-            config update
+            dotdo pull --quiet --rebase origin "$current_branch"
+            dotup
         fi
     fi
 }
