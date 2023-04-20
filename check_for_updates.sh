@@ -3,7 +3,14 @@
 # Check for updates to our Github repo
 
 # Args to specify bare repo
-local git_args=( "--git-dir=$HOME/.dotfiles.git/" "--work-tree=$HOME" )
+git_args=("--git-dir=$HOME/.dotfiles.git/" "--work-tree=$HOME")
+# TODO make this not hardcoded
+REPO="Linkinlog/.dotfiles"
+# Allows us to be on any branch
+CURRENT_BRANCH=$(config rev-parse --abbrev-ref HEAD)
+# Local/remote commit shows what point we are at in the git history for each
+LOCAL_COMMIT=$(config rev-parse HEAD)
+REMOTE_COMMIT=$(curl --connect-timeout 2 -fsSL -H 'Accept: application/vnd.github.v3.sha' "https://api.github.com/repos/$REPO/commits/$CURRENT_BRANCH")
 
 # General git usage for config
 config() {
@@ -27,16 +34,6 @@ config() {
 lazyconf() {
    command lazygit "${git_args[@]}" "$@"
 }
-
-# Get the current branch
-CURRENT_BRANCH=$(config rev-parse --abbrev-ref HEAD)
-
-# Fetch the latest changes from the remote repository
-config fetch >/dev/null 2>&1
-
-# Get the local and remote commit hashes
-LOCAL_COMMIT=$(config rev-parse HEAD)
-REMOTE_COMMIT=$(config ls-remote origin -h refs/heads/$CURRENT_BRANCH | cut -f1)
 
 # If the most recent remote commit isnt the commit we are on, assume we update
 if [[ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ]]; then
