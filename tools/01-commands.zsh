@@ -23,9 +23,9 @@ dotsync() {
 dotedit() {
     local cmd="$1"
     declare -A config_dirs=(
-        ["nvim"]="$HOME/.config/nvim/init.vim"
-        ["tmux"]="$HOME/.config/tmux/tmux.conf"
-        ["zsh"]="$HOME/.config/zsh/.zshrc"
+        ["nvim"]="$HOME/.config/nvim"
+        ["tmux"]="$HOME/.config/tmux"
+        ["zsh"]="$HOME/.config/zsh"
         ["main"]="$HOME/.local/bin/main.sh"
     )
 
@@ -34,9 +34,16 @@ dotedit() {
         return 1
     fi
 
-    if [[ ! -f "${config_dirs[$cmd]}" ]]; then
+    if [[ ! -e "${config_dirs[$cmd]}" ]]; then
         printf "Error: Configuration file %s not found.\n" "${config_dirs[$cmd]}"
         return 1
+    fi
+
+    if [[ -d "${config_dirs[$cmd]}" ]]; then
+        local returnDir="$(pwd)"
+        cd "${config_dirs[$cmd]}" || return 1
+        nvim
+        cd "$returnDir" || return 1
     fi
 
     nvim "${config_dirs[$cmd]}"
