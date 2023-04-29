@@ -8,8 +8,19 @@ dotdo() {
     command /usr/bin/git "${config_git_args[@]}" "$@"
 }
 
+# Easy git pull
+dotpull() {
+    dotdo pull
+}
+
+# Easy git status
+dotstatus() {
+    dotdo status
+}
+
 # To update the submodules properly
 dotup() {
+    dotpull
     dotdo submodule update --init --recursive --remote
 }
 
@@ -19,9 +30,38 @@ dotsync() {
     command "$HOME/.local/bin/main.sh"
 }
 
+# Run lazygit on respective directories
+dotlazy() {
+    local cmd="$1"
+    # TODO refactor two sources of truth (source 1)
+    declare -A config_dirs=(
+        ["nvim"]="$HOME/.config/nvim"
+        ["tmux"]="$HOME/.config/tmux"
+        ["zsh"]="$HOME/.config/zsh"
+        ["bin"]="$HOME/.local/bin"
+    )
+
+    if [[ -z "${config_dirs[$cmd]}" ]]; then
+        command lazygit "${config_git_args[@]}" "$@"
+        return 0
+    fi
+
+    if [[ ! -e "${config_dirs[$cmd]}" ]]; then
+        printf "Error: Configuration dir %s not found.\n" "${config_dirs[$cmd]}"
+        return 1
+    fi
+
+    if [[ -d "${config_dirs[$cmd]}" ]]; then
+        gitdir=$(cat "${config_dirs[$cmd]}/.git" | cut -d ' ' -f 2)
+        abspath=$(readlink -f $gitdir)
+        lazygit --work-tree="${config_dirs[$cmd]}" --git-dir=$abspath
+    fi
+}
+
 # To edit our config files
 dotedit() {
     local cmd="$1"
+    # TODO source 2
     declare -A config_dirs=(
         ["nvim"]="$HOME/.config/nvim"
         ["tmux"]="$HOME/.config/tmux"
@@ -43,15 +83,10 @@ dotedit() {
         local returnDir="$(pwd)"
         cd "${config_dirs[$cmd]}" || return 1
         nvim
-        cd "$returnDir" || return 1
+        cd "$returnDir" && return
     fi
 
     nvim "${config_dirs[$cmd]}"
-}
-
-# Use lazygit with our bare repo
-lazyconf() {
-    command lazygit "${config_git_args[@]}" "$@"
 }
 
 # Docker rebuild function
