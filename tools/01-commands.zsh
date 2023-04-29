@@ -19,13 +19,14 @@ dotstatus() {
 }
 
 # To update the submodules properly
-dotup() {
-    dotpull
+dotsync() {
+    dotdo fetch origin development
+    dotdo merge development
     dotdo submodule update --init --recursive --remote
 }
 
-# To easily run the main command for syncing
-dotsync() {
+# For updating packages
+dotpkgs() {
     sudo -v
     command "$HOME/.local/bin/main.sh"
 }
