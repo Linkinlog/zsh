@@ -20,9 +20,13 @@ dotstatus() {
 
 # To update the submodules properly
 dotsync() {
-    dotdo fetch origin development
-    dotdo merge development
-    dotdo submodule update --init --recursive --remote
+    local current_branch remote
+    # Allows us to be on any branch
+    current_branch=$(dotdo rev-parse --abbrev-ref HEAD)
+    remote=$(dotdo config branch."$current_branch".remote)
+    dotdo fetch -q "$remote" "$current_branch"
+    dotdo merge -q "$current_branch"
+    dotdo submodule update --init --recursive --remote -q
 }
 
 # For updating packages
@@ -48,7 +52,8 @@ dotlazy() {
     fi
 
     if [[ ! -e "${config_dirs[$cmd]}" ]]; then
-        printf "Error: Configuration dir %s not found.\n" "${config_dirs[$cmd]}"
+        printf "Error: Configuration dir %s not found.\n" \
+            "${config_dirs[$cmd]}"
         return 1
     fi
 
@@ -76,7 +81,8 @@ dotedit() {
     fi
 
     if [[ ! -e "${config_dirs[$cmd]}" ]]; then
-        printf "Error: Configuration file %s not found.\n" "${config_dirs[$cmd]}"
+        printf "Error: Configuration file %s not found.\n" \
+            "${config_dirs[$cmd]}"
         return 1
     fi
 
@@ -109,13 +115,15 @@ cdl() {
 
 # Check for updates to the repo and pull if needed
 repo_update_check() {
-    local current_branch local_commit remote_commit repo
+    local current_branch repo local_commit remote_commit
     # Allows us to be on any branch
     current_branch=$(dotdo rev-parse --abbrev-ref HEAD)
     # Local/remote commit shows what point we are at in the git history for each
     repo="${DOTREPO:-Linkinlog/.dotfiles}"
     local_commit=$(dotdo rev-parse HEAD)
-    remote_commit=$(curl --connect-timeout 2 -fsSL -H 'Accept: application/vnd.github.v3.sha' "https://api.github.com/repos/$repo/commits/$current_branch")
+    remote_commit=$(curl --connect-timeout 2 -fsSL \
+        -H 'Accept: application/vnd.github.v3.sha' \
+        "https://api.github.com/repos/$repo/commits/$current_branch")
 
     # If the most recent remote commit isnt the commit we are on, assume we update
     if [[ "$local_commit" != "$remote_commit" ]]; then
@@ -126,8 +134,7 @@ repo_update_check() {
         read -r answer
         printf "\n"
         if [[ "$answer" == "y" ]]; then
-            dotdo pull --quiet --rebase origin "$current_branch"
-            dotup
+            dotsync
         fi
     fi
 }
