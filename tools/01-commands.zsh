@@ -20,12 +20,14 @@ dotstatus() {
 
 # To update the submodules properly
 dotsync() {
-    local current_branch remote
+    local current_branch remote merge tracking
     # Allows us to be on any branch
-    current_branch=$(dotdo rev-parse --abbrev-ref HEAD)
+    current_branch=$(dotdo symbolic-ref --short HEAD)
     remote=$(dotdo config branch."$current_branch".remote)
-    dotdo fetch -q "$remote" "$current_branch"
-    dotdo merge -q "$current_branch"
+    merge=$(dotdo config branch."$current_branch".merge)
+    tracking=${merge##/refs/heads/}
+    dotdo fetch -q "$remote" "$tracking"
+    dotdo merge -q FETCH_HEAD
     dotdo submodule update --init --recursive --remote -q
 }
 
