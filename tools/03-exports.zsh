@@ -1,9 +1,11 @@
 #!/usr/bin/env zsh
 
 # If you come from bash you might have to change your $PATH.
+export GOPATH=$HOME/go
 export GOROOT=/usr/local/go
-export GOBIN=$GOROOT/bin
+export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
+export PATH=/usr/local/go/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
