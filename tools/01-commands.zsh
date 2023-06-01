@@ -75,14 +75,8 @@ dotedit() {
         ["main"]="$HOME/.local/bin/main.sh"
     )
 
-    if [[ -z "${config_dirs[$cmd]}" ]]; then
-        printf "Error: Command not recognized: %s\n" "$cmd"
-        return 1
-    fi
-
-    if [[ ! -e "${config_dirs[$cmd]}" ]]; then
-        printf "Error: Configuration file %s not found.\n" \
-            "${config_dirs[$cmd]}"
+    if [[ -z "$HOME/.config/$cmd" ]]; then
+        printf "\e[31m❌ Error: Command not recognized: %s\e[0m\n" "$cmd"
         return 1
     fi
 
@@ -90,10 +84,23 @@ dotedit() {
         local returnDir="$(pwd)"
         cd "${config_dirs[$cmd]}" || return 1
         nvim
-        cd "$returnDir" && return
+        cd "$returnDir"
+        return
     fi
 
-    nvim "${config_dirs[$cmd]}"
+    if [[ -e "${config_dirs[$cmd]}" ]]; then
+        nvim "${config_dirs[$cmd]}"
+        return
+    fi
+
+    if [[ -d "$HOME/.config/$cmd" ]]; then
+        local returnDir="$(pwd)"
+        cd "$HOME/.config/$cmd" || return 1
+        nvim
+        cd "$returnDir"
+        return
+    fi
+
 }
 
 # Docker rebuild function
