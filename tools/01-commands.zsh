@@ -20,13 +20,16 @@ dotstatus() {
 
 # To update the submodules properly
 dotsync() {
-    local current_branch remote
+    local current_branch remote merge tracking
     # Allows us to be on any branch
-    current_branch=$(dotdo rev-parse --abbrev-ref HEAD)
+    current_branch=$(dotdo symbolic-ref --short HEAD)
     remote=$(dotdo config branch."$current_branch".remote)
-    dotdo fetch -q "$remote" "$current_branch"
-    dotdo merge -q "$current_branch"
-    dotdo submodule update --init --recursive --remote -q
+    merge=$(dotdo config branch."$current_branch".merge)
+    tracking=${merge##/refs/heads/}
+    printf "\e[34m🛠️ Pulling config repo... \e[0m\n"
+    dotdo fetch -q "$remote" "$tracking"
+    dotdo merge -q FETCH_HEAD
+    printf "\e[32m✅ All up-to-date!\e[0m\n"
 }
 
 # For updating packages
@@ -52,7 +55,7 @@ dotlazy() {
     fi
 
     if [[ ! -e "${config_dirs[$cmd]}" ]]; then
-        printf "Error: Configuration dir %s not found.\n" \
+        printf "\e[31m❌ Error: Configuration dir %s not found.\e[0m\n" \
             "${config_dirs[$cmd]}"
         return 1
     fi
@@ -75,8 +78,14 @@ dotedit() {
         ["main"]="$HOME/.local/bin/main.sh"
     )
 
-    if [[ -z "$HOME/.config/$cmd" ]]; then
+    if [[ -z "${config_dirs[$cmd]}" ]]; then
         printf "\e[31m❌ Error: Command not recognized: %s\e[0m\n" "$cmd"
+        return 1
+    fi
+
+    if [[ ! -e "${config_dirs[$cmd]}" ]]; then
+        printf "\e[31m❌ Error: Configuration file %s not found.\e[0m\n" \
+            "${config_dirs[$cmd]}"
         return 1
     fi
 
@@ -134,12 +143,11 @@ repo_update_check() {
 
     # If the most recent remote commit isnt the commit we are on, assume we update
     if [[ "$local_commit" != "$remote_commit" ]]; then
-        printf "There is an update available for the repository:\n"
-        printf "Local commit: %s\n" "$local_commit"
-        printf "Remote commit: %s\n" "$remote_commit"
-        printf "Do you want to update now? (y/n): "
+        printf "\e[33m🚀 Heads up! There's an update ready for your dotfiles!\e[0m\n"
+        printf "\e[34m🛠️ Your local commit: \e[35m%s\e[0m\n" "$local_commit"
+        printf "\e[34m🛠️ The latest remote commit: \e[35m%s\e[0m\n" "$remote_commit"
+        printf "\e[36m✨ Wanna update now? (y/n): \e[0m"
         read -r answer
-        printf "\n"
         if [[ "$answer" == "y" ]]; then
             dotsync
         fi
