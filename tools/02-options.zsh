@@ -8,6 +8,7 @@ xset r rate 190 60 2>/dev/null
 
 # Other Aliases
 alias nv="nvim"
+alias vim="nvim"
 alias ts="tmux new-session -s"
 
 # Samcart configs

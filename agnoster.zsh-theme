@@ -35,7 +35,7 @@
 CURRENT_BG='NONE'
 
 case ${SOLARIZED_THEME:-dark} in
-    light) CURRENT_FG='white' ;;
+    light) CURRENT_FG='black' ;;
     *)     CURRENT_FG='black' ;;
 esac
 
@@ -141,7 +141,7 @@ prompt_git() {
 
 # Dir: current working directory
 prompt_dir() {
-    prompt_segment blue white '%2~'
+    prompt_segment blue black '%2~'
 }
 
 # Virtualenv: current working virtualenv

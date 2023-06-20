@@ -22,7 +22,11 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load?
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+    docker-compose
     git
+    golang
+    tmux
+    z
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
