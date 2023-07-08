@@ -25,7 +25,6 @@ plugins=(
     docker-compose
     git
     golang
-    tmux
     z
     zsh-autosuggestions
     zsh-syntax-highlighting
