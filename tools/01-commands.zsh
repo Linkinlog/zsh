@@ -133,15 +133,15 @@ cdl() {
 repo_update_check() {
     local current_branch repo local_commit remote_commit
     # Allows us to be on any branch
-    current_branch=$(dotdo rev-parse --abbrev-ref HEAD) || ( printf "\e[31m❌ Error: could not parse head\e[0m\n"; return 1;)
+    current_branch=$(dotdo rev-parse --abbrev-ref HEAD) || { printf "\e[31m❌ Error: could not parse head\e[0m\n"; return 1; }
     # Local/remote commit shows what point we are at in the git history for each
     repo="${DOTREPO:-Linkinlog/.dotfiles}"
-    local_commit=$(dotdo rev-parse HEAD) || ( printf "\e[31m❌ Error: could not parse local commit hash\e[0m\n"; return 1;)
+    local_commit=$(dotdo rev-parse HEAD) || { printf "\e[31m❌ Error: could not parse local commit hash\e[0m\n"; return 1; }
     remote_commit=$(curl --connect-timeout 2 -fsSL \
         -H 'Accept: application/vnd.github.v3.sha' \
-        "https://api.github.com/repos/$repo/commits/$current_branch") || ( printf "\e[31m❌ Error: could not get remote commit\e[0m\n"; return 1;)
+        "https://api.github.com/repos/$repo/commits/$current_branch") || { printf "\e[31m❌ Error: could not get remote commit\e[0m\n"; return 1; }
 
-    # If the most recent remote commit isnt the commit we are on, assume we update
+    # If the most recent remote commit isn't the commit we are on, assume we update
     if [[ "$local_commit" != "$remote_commit" ]]; then
         printf "\e[33m🚀 Heads up! There's an update ready for your dotfiles!\e[0m\n"
         printf "\e[34m🛠️ local commit: \e[35m%s\e[0m\n" "$local_commit"
