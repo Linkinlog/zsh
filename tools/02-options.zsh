@@ -17,3 +17,6 @@ if [[ $HOST == "samcart-"* ]]; then
     alias mgmtexec="docker compose exec mgmt"
     alias tf="tmux new-session -s foundation -c ~/workspaces/foundation/"
 fi
+
+# Laravel stuff
+alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
