@@ -153,3 +153,8 @@ repo_update_check() {
         fi
     fi
 }
+
+# set up a new InternetExercise in go
+function ie() {
+    mkdir -p $1; cd $_; go mod init $1
+}
