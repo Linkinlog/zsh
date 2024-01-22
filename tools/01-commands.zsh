@@ -156,5 +156,9 @@ repo_update_check() {
 
 # set up a new InternetExercise in go
 function ie() {
-    mkdir -p $1; cd $_; go mod init $1
+    mkdir -p $1
+    cd $_
+    echo "package main" > main.go
+    echo "package main" > main_test.go
+    go mod init $1
 }
