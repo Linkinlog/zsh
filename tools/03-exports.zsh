@@ -3,7 +3,7 @@
 # If you come from bash you might have to change your $PATH.
 #export GOPATH=$HOME/go
 #export GOROOT=/usr/local/go
-export PATH=$PATH:$(go env GOPATH)/bin/
+export PATH=$PATH:$(go env GOPATH)/bin/:$HOME/.local/bin
 #export PATH=/usr/local/go/bin:$PATH
 
 # Path to your oh-my-zsh installation.
@@ -28,9 +28,3 @@ export NVM_DIR="$HOME/.nvm"
 # Ruby/Jekyll stuff
 export GEM_HOME="$HOME/gems"
 export PATH="$HOME/gems/bin:$PATH"
-
-# Work stuff
-if [[ -f "$HOME/.config/samcart/.env" ]]; then
-    source "$HOME/.config/samcart/.env"
-fi
-

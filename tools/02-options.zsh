@@ -10,13 +10,12 @@ xset r rate 190 60 2>/dev/null
 alias nv="nvim"
 alias vim="nvim"
 alias ts="tmux new-session -s"
-
-# Samcart configs
-if [[ $HOST == "samcart-"* ]]; then
-    alias appexec="docker compose exec app"
-    alias mgmtexec="docker compose exec mgmt"
-    alias tf="tmux new-session -s foundation -c ~/workspaces/foundation/"
-fi
+alias code='dir=~/codespaces;cd $dir/$(ls $dir|fzf); nvim'
 
 # Laravel stuff
 alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
+
+# Ruby stuff
+source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+chruby ruby-3.1.3
