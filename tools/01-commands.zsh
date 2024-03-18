@@ -162,3 +162,19 @@ function ie() {
     echo "package main" > main_test.go
     go mod init $1
 }
+
+# find and edit
+function svim() {
+    local file
+    if [[ -n $1 ]]; then
+        file=$(find . -iname "*$1*" | fzf --tac)
+    else
+        file=$(fzf)
+    fi
+
+    if [[ -z $file ]]; then
+        return
+    fi
+
+    nvim "$file"
+}

@@ -12,6 +12,10 @@ alias vim="nvim"
 alias ts="tmux new-session -s"
 alias code='dir=~/codespaces;cd $dir/$(ls $dir|fzf); nvim'
 
+if [[ $(uname) == "Darwin" ]]; then
+    alias gdb="arm-none-eabi-gdb"
+fi
+
 # Laravel stuff
 alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
 
