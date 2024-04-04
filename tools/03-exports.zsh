@@ -1,10 +1,19 @@
 #!/usr/bin/env zsh
 
-# If you come from bash you might have to change your $PATH.
-#export GOPATH=$HOME/go
-#export GOROOT=/usr/local/go
-export PATH=$PATH:$(go env GOPATH)/bin/:$HOME/.local/bin
-#export PATH=/usr/local/go/bin:$PATH
+# Other Aliases
+alias nv="nvim"
+alias vim="nvim"
+alias ts="tmux new-session -s"
+alias code='dir=~/codespaces;cd $dir/$(ls $dir|fzf); nvim'
+
+if [[ $(uname) == "Darwin" ]]; then
+    alias gdb="arm-none-eabi-gdb"
+fi
+
+# Laravel stuff
+alias s='[ -f sail ] && sh sail || sh vendor/bin/sail'
+
+export PATH="$PATH:$(go env GOPATH)/bin/:$HOME/.local/bin:$HOME/gems/bin"
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -13,12 +22,7 @@ export CONF="$HOME/.config/zsh"
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR='nvim'
-else
-    export EDITOR='nvim'
-fi
+export EDITOR='nvim'
 
 # NVM stuff
 export NVM_DIR="$HOME/.nvm"
@@ -27,4 +31,14 @@ export NVM_DIR="$HOME/.nvm"
 
 # Ruby/Jekyll stuff
 export GEM_HOME="$HOME/gems"
-export PATH="$HOME/gems/bin:$PATH"
+
+# Rust stuff
+if [ -f ~/export-esp.sh ]; then
+    source ~/export-esp.sh
+fi
+
+
+# Ruby stuff
+source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+chruby ruby-3.1.3
