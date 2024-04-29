@@ -112,6 +112,10 @@ dotedit() {
 
 }
 
+dotload() {
+    source $HOME/.zshrc
+}
+
 # Docker rebuild function
 docker() {
     if [[ $@ == "--rebuild" ]]; then
@@ -155,7 +159,7 @@ repo_update_check() {
 }
 
 # set up a new InternetExercise in go
-function ie() {
+ie() {
     mkdir -p $1
     cd $_
     echo "package main" > main.go
@@ -164,7 +168,7 @@ function ie() {
 }
 
 # find and edit
-function svim() {
+svim() {
     local file
     if [[ -n $1 ]]; then
         file=$(find . -iname "*$1*" | fzf --tac)
@@ -177,4 +181,10 @@ function svim() {
     fi
 
     nvim "$file"
+}
+
+# split run
+sr() {
+    tmux split-window -h $2
+    sh -c $1
 }

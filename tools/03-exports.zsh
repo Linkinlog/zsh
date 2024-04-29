@@ -5,6 +5,7 @@ alias nv="nvim"
 alias vim="nvim"
 alias ts="tmux new-session -s"
 alias code='dir=~/codespaces;cd $dir/$(ls $dir|fzf); nvim'
+alias work='dir=~/work;cd $dir/$(ls $dir|fzf); nvim'
 
 if [[ $(uname) == "Darwin" ]]; then
     alias gdb="arm-none-eabi-gdb"
