@@ -188,3 +188,11 @@ sr() {
     tmux split-window -h $2
     sh -c $1
 }
+
+# concord commands
+cb() {
+    gswc "bugfix/COPA-$1"
+}
+cf() {
+    gswc "feature/COPA-$1"
+}
