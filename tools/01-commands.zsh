@@ -167,8 +167,13 @@ ie() {
     go mod init $1
 }
 
-# find and edit
-svim() {
+# wrap neovim
+n() {
+    nvim $@
+}
+
+# find and edit from local source
+nl() {
     local file
     if [[ -n $1 ]]; then
         file=$(find . -iname "*$1*" | fzf --tac)
@@ -183,6 +188,22 @@ svim() {
     nvim "$file"
 }
 
+# find and edit from global source
+ng() {
+    local file
+    if [[ -n $1 ]]; then
+        file=$(ls "$1" | fzf --tac)
+    else
+        file=$(fzf)
+    fi
+
+    if [[ -z $file ]]; then
+        return
+    fi
+
+    nvim "$1"/"$file"
+}
+
 # split run
 sr() {
     tmux split-window -h $2
@@ -191,8 +212,8 @@ sr() {
 
 # concord commands
 cb() {
-    gswc "bugfix/COPA-$1"
+    git switch -c "bugfix/COPA-$1"
 }
 cf() {
-    gswc "feature/COPA-$1"
+    git switch -c "feature/COPA-$1"
 }
