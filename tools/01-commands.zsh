@@ -217,3 +217,15 @@ cb() {
 cf() {
     git switch -c "feature/COPA-$1"
 }
+ch() {
+    git switch -c "hotfix/COPA-$1"
+}
+
+enc() {
+    key=$1
+    if [[ -z $key ]]; then
+        key=$PGP_KEY
+    fi
+
+    gpg -r $PGP_KEY -e $1
+}
