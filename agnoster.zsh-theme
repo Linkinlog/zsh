@@ -165,6 +165,10 @@ prompt_status() {
     [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
+prompt_newline() {
+		echo -n "\n %F{blue}-->"
+}
+
 ## Main prompt
 build_prompt() {
     RETVAL=$?
@@ -174,6 +178,7 @@ build_prompt() {
     prompt_dir
     prompt_git
     prompt_end
+    prompt_newline
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
