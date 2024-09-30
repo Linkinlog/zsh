@@ -79,7 +79,7 @@ prompt_end() {
     else
         echo -n "%{%k%}"
     fi
-    echo -n "%{%f%}\n%F{magenta}->%{%f%}"
+    echo -n "%{%f%}"
     CURRENT_BG=''
 }
 
