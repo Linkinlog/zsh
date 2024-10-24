@@ -222,10 +222,57 @@ ch() {
 }
 
 enc() {
-    key=$1
-    if [[ -z $key ]]; then
-        key=$PGP_KEY
-    fi
+	if [[ -z $PGP_KEY ]]; then
+		echo "PGP_KEY is not set"
+		return 1
+	fi
+
+	if [[ -z $1 ]]; then
+		echo "No file provided"
+		return 1
+	fi
+
+	if [[ ! -f $1 ]]; then
+		echo "File does not exist"
+		return 1
+	fi
 
     gpg -r $PGP_KEY -e $1
+}
+
+denc() {
+	encryptedFile=$1
+	outputFile=${encryptedFile%.*}
+
+	if [[ -z $PGP_KEY ]]; then
+		echo "PGP_KEY is not set"
+		return 1
+	fi
+
+	if [[ -z $encryptedFile ]]; then
+		echo "No file provided"
+		return 1
+	fi
+
+	if [[ -z $outputFile ]]; then
+		echo "No output file provided"
+		return 1
+	fi
+
+	if [[ ! -f $encryptedFile ]]; then
+		echo "File does not exist"
+		return 1
+	fi
+
+	if [[ ! $encryptedFile =~ \.gpg$ ]]; then
+		echo "File is not a .gpg file"
+		return 1
+	fi
+
+	if [[ -f $outputFile ]]; then
+		echo "Output file already exists"
+		return 1
+	fi
+
+	gpg --output $outputFile -d $encryptedFile
 }
