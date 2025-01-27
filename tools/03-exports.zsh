@@ -46,3 +46,6 @@ chruby ruby-3.1.3
 
 # PGP
 export PGP_KEY="608589C2D12B69C7C9D387EC06C146519D92C692"
+
+# ESP-IDF
+alias get_idf='. $HOME/esp/esp-idf/export.sh'
