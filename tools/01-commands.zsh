@@ -276,3 +276,43 @@ denc() {
 
 	gpg --output $outputFile -d $encryptedFile
 }
+
+# Switch neovim version
+sv() {
+    version=$(ls $HOME/Documents/nvim | fzf)
+    if [[ -z $version ]]; then
+        echo "No version selected"
+        return 1
+    fi
+    echo "Found $version. Is this the version you want to switch to?"
+    select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) switchVim $version; break;;
+        No ) return 0;
+    esac
+done
+}
+
+switchVim() {
+    if [[ -z $1 ]]; then
+        echo "No version provided"
+        return 1
+    fi
+
+    if [[ ! -d $HOME/Documents/nvim/$1 ]]; then
+        echo "Version does not exist"
+        return 1
+    fi
+
+    p=$(which nvim)
+    if [[ -z $p ]]; then
+        echo "Neovim is not installed"
+        return 1
+    fi
+
+    sudo rm $p
+
+    sudo ln -s $HOME/Documents/nvim/$1/bin/nvim /usr/local/bin/nvim
+
+    nvim -v
+}
