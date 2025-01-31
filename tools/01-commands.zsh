@@ -304,13 +304,10 @@ switchVim() {
         return 1
     fi
 
-    p=$(which nvim)
-    if [[ -z $p ]]; then
-        echo "Neovim is not installed"
-        return 1
+    p=$(command -v nvim)
+    if [[ -n $p ]]; then
+        sudo rm "$p"
     fi
-
-    sudo rm $p
 
     sudo ln -s $HOME/Documents/nvim/$1/bin/nvim /usr/local/bin/nvim
 
